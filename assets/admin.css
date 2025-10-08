@@ -1,0 +1,42 @@
+/* Admin & Frontend UI */
+.uc-app .uc-app-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.uc-app .uc-card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:16px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.uc-app .uc-list .tablenav { padding:8px 0; }
+.uc-app .uc-toolbar { display:flex; gap:8px; align-items:center; margin:10px 0 16px; }
+.uc-ua { display:inline-block; max-width:420px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; vertical-align:bottom; }
+.uc-badge { display:inline-block; padding:2px 8px; border-radius:999px; background:#eef2ff; border:1px solid #c7d2fe; font-size:11px; margin-right:6px; }
+
+.uc-expo-badge { display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border-radius:10px; background:#e6ffed; border:1px solid #b7f5c6; }
+
+.uc-qr-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:16px; margin-top:16px; }
+.uc-qr-card { border:1px solid #e2e8f0; border-radius:14px; padding:12px; background:#fff; break-inside:avoid; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.uc-qr-thumb { width:100%; height:120px; border-radius:10px; background:#f1f5f9 center/cover no-repeat; margin-bottom:8px; background-size: contain;}
+.uc-qr-img { width:220px; height:220px; margin: 0 auto 10px; }
+.uc-qr-meta code { word-break: break-all; font-size: 11px; color: #555; }
+
+.uc-lb .uc-lb-header { display:flex; justify-content:flex-end; margin-bottom:12px; }
+.uc-lb .uc-lb-search input[type="text"] { padding:6px 8px; border:1px solid #ccc; border-radius:8px; }
+.uc-lb .uc-lb-search button { margin-left:6px; }
+.uc-lb-podium { display:grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap:12px; margin-bottom:12px; }
+.uc-lb-card { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:12px; text-align:center; }
+.uc-lb-medal { font-size:24px; margin-bottom:6px; }
+.uc-lb-name { font-weight:600; margin-bottom:4px; }
+.uc-lb-table table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #e2e8f0; border-radius:10px; overflow:hidden; }
+.uc-lb-table th, .uc-lb-table td { padding:10px; border-bottom:1px solid #eef2f7; }
+.uc-lb-pagination { margin-top:10px; display:flex; gap:6px; }
+.uc-lb-pagination a { padding:6px 10px; border:1px solid #e2e8f0; border-radius:8px; text-decoration:none; }
+.uc-lb-pagination a.current { background:#eef2ff; border-color:#c7d2fe; }
+
+.uc-my-checkins .uc-optout { margin-bottom:12px; }
+.uc-my-checkins .uc-filters { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
+.uc-my-checkins .uc-table table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #e2e8f0; border-radius:10px; overflow:hidden; }
+.uc-my-checkins th, .uc-my-checkins td { padding:10px; border-bottom:1px solid #eef2f7; }
+.uc-pagination { margin-top:10px; display:flex; gap:6px; }
+.uc-pagination a { padding:6px 10px; border:1px solid #e2e8f0; border-radius:8px; text-decoration:none; }
+.uc-pagination a.current { background:#eef2ff; border-color:#c7d2fe; }
+
+@media print {
+  .wp-admin #adminmenumain, .wp-admin #wpadminbar, .wp-admin .notice, .wp-admin .tablenav, .wp-admin .update-nag, .wp-admin .page-title-action, .wp-admin .wrap > p:first-of-type button { display:none!important; }
+  .uc-qr-card { page-break-inside:avoid; border:none; box-shadow:none; }
+  .uc-qr-meta code { color:#000; }
+}
