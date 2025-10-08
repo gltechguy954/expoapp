@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UC Expo — QR Check-ins
  * Description: The ultimate app for running an expo. Allow attendees to check in to exhibitors booths, sessions, display leaderboarads, gamification, and more 
- * Version:     1.6.0
+ * Version:     2.0.0
  * Author:      UC Dev Team
  * Requires PHP: 7.4
  */
@@ -20,6 +20,7 @@ require_once UC_EXPO_QR_DIR . 'includes/class-docs.php';
 require_once UC_EXPO_QR_DIR . 'includes/class-leaderboard.php';
 require_once UC_EXPO_QR_DIR . 'includes/class-blocks.php';
 require_once UC_EXPO_QR_DIR . 'includes/class-dashboard-widget.php';
+require_once UC_EXPO_QR_DIR . 'includes/class-nursery.php';
 
 add_action('plugins_loaded', function(){
     UC_Expo_QR_Checkins::instance();
@@ -31,4 +32,5 @@ add_action('plugins_loaded', function(){
         UC_Expo_QR_Dashboard_Widget::instance();
     }
     UC_Expo_QR_Blocks::instance();
+    UC_Expo_QR_Nursery::instance();
 });

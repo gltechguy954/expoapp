@@ -34,6 +34,7 @@ class UC_Expo_QR_Admin {
     public function register_settings() {
         register_setting('uc_expo_qr', UC_Expo_QR_Checkins::OPTION_EVENT, ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field']);
         register_setting('uc_expo_qr', UC_Expo_QR_Checkins::OPTION_SECRET, ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field']);
+        register_setting('uc_expo_qr', UC_Expo_QR_Nursery::OPTION_ENABLE, ['type' => 'boolean', 'sanitize_callback' => [$this, 'sanitize_checkbox']]);
 
         add_settings_section('uc_expo_qr_main', __('General', 'uc-expo'), function(){
             echo '<p>'.esc_html__('Set the current event id (e.g., 2025-ATL). Use "Rotate Secret" to invalidate old QR signatures and generate new ones.', 'uc-expo').'</p>';
@@ -49,6 +50,15 @@ class UC_Expo_QR_Admin {
             echo '<input type="text" readonly value="'.$val.'" class="regular-text code" />';
             submit_button(__('Rotate Secret', 'uc-expo'), 'secondary', 'uc_expo_rotate_secret', false, ['style'=>'margin-left:10px']);
         }, 'uc_expo_qr', 'uc_expo_qr_main');
+
+        add_settings_field('nursery_mode', __('Nursery Mode', 'uc-expo'), function(){
+            $enabled = UC_Expo_QR_Nursery::instance()->is_enabled();
+            echo '<label><input type="checkbox" name="'.esc_attr(UC_Expo_QR_Nursery::OPTION_ENABLE).'" value="1" '.checked($enabled, true, false).' /> '.esc_html__('Enable UC Church Nursery check-ins (beta)', 'uc-expo').'</label>';
+        }, 'uc_expo_qr', 'uc_expo_qr_main');
+    }
+
+    public function sanitize_checkbox($value) {
+        return $value ? 1 : 0;
     }
 
     public function render_settings() {
