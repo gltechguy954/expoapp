@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) exit;
 
 final class UC_Expo_QR_Checkins {
-    const VERSION = '1.6.0';
+    const VERSION = '2.0.0';
     const OPTION_SECRET = 'uc_expo_qr_secret';
     const OPTION_EVENT  = 'uc_expo_current_event_id';
     const COOKIE_PENDING = 'uc_qr_pending_checkin';
@@ -50,6 +50,11 @@ final class UC_Expo_QR_Checkins {
             'index.php?' . self::QV_FLAG . '=1&'. self::QV_TP .'=exhibitor&ex=$matches[1]&ev=$matches[2]&sig=$matches[3]',
             'top'
         );
+        add_rewrite_rule(
+            '^qr/(child|pickup|label)/([0-9]+)/([^/]+)/([^/]+)$',
+            'index.php?' . self::QV_FLAG . '=1&'. self::QV_TP .'=$matches[1]&ex=$matches[2]&ev=$matches[3]&sig=$matches[4]',
+            'top'
+        );
     }
 
     public function table_name() { global $wpdb; return $wpdb->prefix . 'uc_expo_checkins'; }
@@ -86,6 +91,14 @@ final class UC_Expo_QR_Checkins {
         $event_id = sanitize_text_field((string) get_query_var('ev'));
         $sig      = sanitize_text_field((string) get_query_var('sig'));
 
+        if (UC_Expo_QR_Nursery::instance()->is_nursery_qr_type($type_seg)) {
+            if (!$post_id || !$event_id || !$sig || !$type_seg || !$this->verify_nursery_sig($type_seg, $post_id, $event_id, $sig)) {
+                status_header(403); wp_die('Invalid or expired QR link.', 'QR Forbidden', ['response' => 403]);
+            }
+            UC_Expo_QR_Nursery::instance()->handle_qr_scan($type_seg, $post_id, $event_id);
+            return;
+        }
+
         if (!$post_id || !$event_id || !$sig || !$type_seg || !$this->verify_sig($type_seg, $post_id, $event_id, $sig)) {
             status_header(403); wp_die('Invalid or expired QR link.', 'QR Forbidden', ['response' => 403]);
         }
@@ -103,6 +116,21 @@ final class UC_Expo_QR_Checkins {
         setcookie(self::COOKIE_PENDING, $cookie_val, time()+900, COOKIEPATH ?: '/', COOKIE_DOMAIN, is_ssl(), true);
         $return = home_url($_SERVER['REQUEST_URI'] ?? '');
         wp_safe_redirect( wp_login_url($return) ); exit;
+    }
+
+    public function nursery_sig_for(string $type_seg, int $record_id, string $token): string {
+        $data = "nursery:$type_seg|id:$record_id|token:$token";
+        return $this->b64url(hash_hmac('sha256', $data, $this->get_secret(), true));
+    }
+
+    public function verify_nursery_sig(string $type_seg, int $record_id, string $token, string $sig): bool {
+        $calc = $this->nursery_sig_for($type_seg, $record_id, $token);
+        return hash_equals($calc, $sig);
+    }
+
+    public function nursery_qr_url(string $type_seg, int $record_id, string $token): string {
+        $sig = $this->nursery_sig_for($type_seg, $record_id, $token);
+        return home_url("/qr/$type_seg/$record_id/$token/$sig");
     }
 
     public function complete_post_login($user_login, $user) {
